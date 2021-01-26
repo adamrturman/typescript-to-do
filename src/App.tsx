@@ -1,26 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import ToDoList from './ToDoList/ToDoList'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+interface Props {}
+
+interface State {
+  list: string[],
+  currentTask: any
+  // todo: string,
+}
+
+
+class App extends Component<Props, State> {
+  constructor(props:any){
+    super(props)
+    this.state = {
+      list: [],
+      currentTask: {
+        todo : '',
+        isCompleted : false
+      }
+
+    }
+  }
+
+  handleChange = (event:any) => {
+    this.setState({ currentTask: { todo: event.target.value} })
+  }
+
+  handleClick = (event:any) => {
+    const processedList = [this.state.currentTask.todo, ...this.state.list]
+    this.setState({ list: processedList })
+    this.setState({ currentTask: {todo: ''} })
+  }
+  
+  render () {
+    return (
+      <div className="App">
+        <h1>Typescript To Do App</h1>
+        <input value={this.state.currentTask.todo} onChange={this.handleChange}></input>
+        <button onClick={this.handleClick}>Add</button>
+        <ToDoList item={this.state.currentTask} list={this.state.list} />
+      </div>
+    );
+  }
 }
 
 export default App;
