@@ -24,14 +24,19 @@ class App extends Component<Props, State> {
     }
   }
 
+  handleDelete:any = (event: any, index: number) => {
+    const processedList = [... this.state.list]
+    console.log(processedList, index)
+}
+
   handleChange = (event:any) => {
-    this.setState({ currentTask: { todo: event.target.value} })
+    this.setState({ currentTask: { todo: event.target.value , isCompleted: false } })
   }
 
   handleClick = (event:any) => {
-    const processedList = [this.state.currentTask.todo, ...this.state.list]
+    const processedList = [...this.state.list, this.state.currentTask.todo]
     this.setState({ list: processedList })
-    this.setState({ currentTask: {todo: ''} })
+    this.setState({ currentTask: {todo: '', isCompleted: false} })
   }
   
   render () {
@@ -40,7 +45,7 @@ class App extends Component<Props, State> {
         <h1>Typescript To Do App</h1>
         <input value={this.state.currentTask.todo} onChange={this.handleChange}></input>
         <button onClick={this.handleClick}>Add</button>
-        <ToDoList item={this.state.currentTask} list={this.state.list} />
+        <ToDoList item={this.state.currentTask} list={this.state.list} deleted={this.handleDelete} />
       </div>
     );
   }

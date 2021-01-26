@@ -1,9 +1,10 @@
-import { listenerCount } from 'process'
 import React, {Component} from 'react'
+import styles from  './ToDoList.module.css'
 
 interface Props {
-    item: object,
+    item: any,
     list: string[]
+    deleted: any
     // completed: boolean
 }
 
@@ -19,12 +20,15 @@ class ToDoList extends Component<Props, State> {
         }
     }
 
+
+
     componentDidMount(){
-        console.log("Mounted", this.props)
+        console.log("Mounted", this.props.item.isCompleted)
     }
 
     componentWillUpdate() {
         console.log("Will update")
+        
     }
 
     componentDidUpdate(){
@@ -33,8 +37,8 @@ class ToDoList extends Component<Props, State> {
 
     
     render() {
-        const mappedList = this.props.list.map((item) => (
-            <li>{item}</li>
+        const mappedList = this.props.list.map((item, index) => (
+            <li className={styles.bold}>{item}<button>Mark Done</button><button onClick={this.props.deleted(index)}>Delete</button></li>
         ))
         return(
             <>
