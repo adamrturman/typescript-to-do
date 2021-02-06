@@ -1,52 +1,59 @@
-import React, {Component} from 'react'
-import styles from  './ToDoList.module.css'
+import React, { Component } from 'react';
+import styles from './ToDoList.module.css';
+
+interface currentTask {
+    todo: string,
+    isCompleted: boolean
+}
 
 interface Props {
-    item: any,
-    list: string[]
-    deleted: any
-    // completed: boolean
+    item: currentTask;
+    list: currentTask[];
+    handleDelete: (index: number) => void;
+    handleComplete: (index: number) => void;
 }
 
 interface State {
-    list: string[]
 }
 
 class ToDoList extends Component<Props, State> {
-    constructor(props: Props){
-        super(props)
-        this.state = {
-            list: []
-        }
-    }
+    // handleComplete = (index: number) => {
+    //     //  need to build this function out
+    // }
 
-
-
-    componentDidMount(){
-        console.log("Mounted", this.props.item.isCompleted)
+    componentDidMount() {
+        console.log("Mounted- item.isCompleted", this.props.item.isCompleted)
     }
 
     componentWillUpdate() {
         console.log("Will update")
-        
+
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         console.log("Did Update", this.props)
     }
 
-    
     render() {
-        const mappedList = this.props.list.map((item, index) => (
-            <li className={styles.bold}>{item}<button>Mark Done</button><button onClick={this.props.deleted(index)}>Delete</button></li>
-        ))
-        return(
+        const mappedList = this.props.list.map((item, index) => {
+            const itemClasses = item.isCompleted ? `${styles.completed} ${styles.bold}` : styles.bold;
+
+            return (
+                <li className={itemClasses} key={index}>
+                    {item.todo}
+                    <button onClick={() => this.props.handleComplete(index)}>Mark Done</button>
+                    <button onClick={() => this.props.handleDelete(index)}>Delete</button>
+                </li>
+            )
+        });
+        
+        return (
             <>
-            <h1>ToDoList</h1>
-            <div>{mappedList}</div>
+                <h2>ToDoList</h2>
+                <div>{mappedList}</div>
             </>
-        )
+        );
     }
 }
 
-export default ToDoList
+export default ToDoList;
