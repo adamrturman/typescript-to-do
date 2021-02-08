@@ -14,12 +14,16 @@ interface Props {
 }
 
 interface State {
+    isEditable: boolean
 }
 
 class ToDoList extends Component<Props, State> {
     // handleComplete = (index: number) => {
     //     //  need to build this function out
     // }
+    state: State = {
+        isEditable: false
+    }
 
     componentDidMount() {
         console.log("Mounted- item.isCompleted", this.props.item.isCompleted)
@@ -39,14 +43,20 @@ class ToDoList extends Component<Props, State> {
             const itemClasses = item.isCompleted ? `${styles.completed} ${styles.bold}` : styles.bold;
 
             return (
-                <li className={itemClasses} key={index}>
-                    {item.todo}
+                <li  className={itemClasses} key={index}>
+                    <span contentEditable={this.state.isEditable}>
+                        {item.todo}
+                    </span>
                     <button onClick={() => this.props.handleComplete(index)}>Mark Done</button>
                     <button onClick={() => this.props.handleDelete(index)}>Delete</button>
+                    {this.state.isEditable ? 
+                    <button onClick={() => this.setState({ isEditable: false })}>Save</button> : 
+                    <button onClick={() => this.setState({ isEditable: true })}>Edit</button>}
+                    {/* {this.state.isEditable ? <button>Save</button> : null} */}
                 </li>
             )
         });
-        
+
         return (
             <>
                 <h2>ToDoList</h2>
