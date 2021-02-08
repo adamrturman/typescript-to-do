@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import ToDoList from './ToDoList/ToDoList';
+import ErrorModal from './ErrorModal/ErrorModal'
 
 interface Props { }
 
@@ -11,7 +12,8 @@ interface CurrentTask {
 
 interface State {
   list: CurrentTask[],
-  currentTask: CurrentTask
+  currentTask: CurrentTask,
+  hasError: boolean
 }
 
 class App extends Component<Props, State> {
@@ -20,7 +22,8 @@ class App extends Component<Props, State> {
     currentTask: {
       todo: '',
       isCompleted: false
-    }
+    },
+    hasError: false
   };
 
   //  'any' below throws error when using type React.KeyboardEvent<HTMLInputElement>
@@ -29,9 +32,14 @@ class App extends Component<Props, State> {
   }
 
   handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (this.state.currentTask.todo.length) {
     const processedList = [...this.state.list, this.state.currentTask]
     this.setState({ list: processedList })
     this.setState({ currentTask: { todo: '', isCompleted: false } })
+    } else {
+      // alert('Blank todos are not allowed.')
+      this.setState({ hasError: true })
+    }
   }
 
   handleDelete = (index: number) => { // "shadowing"
@@ -58,6 +66,9 @@ class App extends Component<Props, State> {
   
 
   render() {
+    if (this.state.hasError) {
+      return <ErrorModal />
+    }
     return (
       <div className="App">
         <h1>Typescript To Do App</h1>
