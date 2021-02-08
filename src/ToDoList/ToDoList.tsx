@@ -11,6 +11,7 @@ interface Props {
     list: currentTask[];
     handleDelete: (index: number) => void;
     handleComplete: (index: number) => void;
+    remainingTaskCount: () => number;
 }
 
 interface State {
@@ -18,41 +19,26 @@ interface State {
 }
 
 class ToDoList extends Component<Props, State> {
-    // handleComplete = (index: number) => {
-    //     //  need to build this function out
-    // }
     state: State = {
         isEditable: false
     }
 
-    componentDidMount() {
-        console.log("Mounted- item.isCompleted", this.props.item.isCompleted)
-    }
-
-    componentWillUpdate() {
-        console.log("Will update")
-
-    }
-
-    componentDidUpdate() {
-        console.log("Did Update", this.props)
-    }
 
     render() {
         const mappedList = this.props.list.map((item, index) => {
             const itemClasses = item.isCompleted ? `${styles.completed} ${styles.bold}` : styles.bold;
 
             return (
-                <li  className={itemClasses} key={index}>
-                    <span contentEditable={this.state.isEditable}>
+                <li className={itemClasses} key={index}>
+                    <span contentEditable={this.state.isEditable} suppressContentEditableWarning={true}>
                         {item.todo}
                     </span>
-                    <button onClick={() => this.props.handleComplete(index)}>Mark Done</button>
+                    <button onClick={() => this.props.handleComplete(index)}>{item.isCompleted ? `Mark Undone` : `Mark Done`}</button>
                     <button onClick={() => this.props.handleDelete(index)}>Delete</button>
-                    {this.state.isEditable ? 
-                    <button onClick={() => this.setState({ isEditable: false })}>Save</button> : 
-                    <button onClick={() => this.setState({ isEditable: true })}>Edit</button>}
-                    {/* {this.state.isEditable ? <button>Save</button> : null} */}
+                    {this.state.isEditable ?
+                        <button onClick={() => this.setState({ isEditable: false })}>Save</button> :
+                        <button onClick={() => this.setState({ isEditable: true })}>Edit</button>
+                    }
                 </li>
             )
         });
@@ -61,6 +47,7 @@ class ToDoList extends Component<Props, State> {
             <>
                 <h2>ToDoList</h2>
                 <div>{mappedList}</div>
+                <div>Items remaining: {this.props.remainingTaskCount}</div>
             </>
         );
     }
