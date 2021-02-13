@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './ToDoList.module.css';
+import ToDoItem from '../ToDoItem/ToDoItem'
 
 interface currentTask {
     todo: string,
@@ -11,37 +12,19 @@ interface Props {
     list: currentTask[];
     handleDelete: (index: number) => void;
     handleComplete: (index: number) => void;
+    handleSave: (index: number, text: string) => void;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     remainingTaskCount: () => number;
 }
 
-interface State {
-    isEditable: boolean
-}
-
-class ToDoList extends Component<Props, State> {
-    state: State = {
-        isEditable: false
-    }
-
-
+class ToDoList extends Component<Props, {}> {
     render() {
-        const mappedList = this.props.list.map((item, index) => {
-            const itemClasses = item.isCompleted ? `${styles.completed} ${styles.bold}` : styles.bold;
-
-            return (
-                <li className={itemClasses} key={index}>
-                    <span contentEditable={this.state.isEditable} suppressContentEditableWarning={true}>
-                        {item.todo}
-                    </span>
-                    <button onClick={() => this.props.handleComplete(index)}>{item.isCompleted ? `Mark Undone` : `Mark Done`}</button>
-                    <button onClick={() => this.props.handleDelete(index)}>Delete</button>
-                    {this.state.isEditable ?
-                        <button onClick={() => this.setState({ isEditable: false })}>Save</button> :
-                        <button onClick={() => this.setState({ isEditable: true })}>Edit</button>
-                    }
-                </li>
-            )
-        });
+        const mappedList = this.props.list.map((item, index) => <ToDoItem item={item} 
+                                                                index={index} 
+                                                                handleComplete={this.props.handleComplete} 
+                                                                handleSave={this.props.handleSave} 
+                                                                handleChange={this.props.handleChange}
+                                                                handleDelete={this.props.handleDelete}/>);
 
         return (
             <>

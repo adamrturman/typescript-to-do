@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-interface State {
+interface Props {
     isOpen: boolean;
+    closeModal: () => void;
 }
 
-class ErrorModal extends Component<{}, State> {
-    state: State = {
-        isOpen: true
-    }
+//  stateless, prop-ful component
+class ErrorModal extends Component<Props, {}> {
 
     render() {
         return (
             <Modal
                 size="sm"
-                show={this.state.isOpen}
-                onHide={() => this.setState({ isOpen: false })}
+                show={this.props.isOpen}
+                //  need to rework this line, but unsure now that isOpen is a prop instead of state
+                // onHide={() => this.setState({ isOpen: false })}
+                onHide={this.props.closeModal}
                 aria-labelledby="example-modal-sizes-title-sm"
             >
                 <Modal.Header closeButton>
